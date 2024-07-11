@@ -11,6 +11,3 @@ class Solution:
         # after the count, each time a number already exists, increment by 
         
         return moves
-    
-    
-    
