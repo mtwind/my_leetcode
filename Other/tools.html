@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tools</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Add your custom CSS here */
+        .tool-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .tool-title {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="toolsContainer"></div>
+    <script>
+        $(document).ready(function() {
+            // Function to fetch tools from SharePoint list
+            function fetchTools(pillar) {
+                const siteUrl = _spPageContextInfo.webAbsoluteUrl;
+                const listName = "Tools";
+                const encodedPillar = encodeURIComponent(pillar);
+                const queryUrl = `${siteUrl}/_api/web/lists/getbytitle('${listName}')/items?$filter=Pillar eq '${encodedPillar}'`;
+
+                $.ajax({
+                    url: queryUrl,
+                    method: "GET",
+                    headers: {
+                        "Accept": "application/json; odata=verbose"
+                    },
+                    success: function(data) {
+                        const tools = data.d.results;
+                        displayTools(tools);
+                    },
+                    error: function(error) {
+                        console.error("Error fetching tools:", error);
+                    }
+                });
+            }
+
+            // Function to display tools in custom format
+            function displayTools(tools) {
+                const container = $("#toolsContainer");
+                container.empty();
+                tools.forEach(tool => {
+                    const toolHtml = `
+                        <div class="tool-item">
+                            <div class="tool-title">${tool.Title}</div>
+                            <div>Purpose: ${tool.Purpose}</div>
+                        </div>
+                    `;
+                    container.append(toolHtml);
+                });
+            }
+
+            // Fetch the title of the current SharePoint page
+            const pageTitle = document.title;
+
+            // Fetch tools based on the page title
+            fetchTools(pageTitle);
+        });
+    </script>
+</body>
+</html>
