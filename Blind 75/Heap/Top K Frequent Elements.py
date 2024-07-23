@@ -32,18 +32,29 @@ class Solution:
 
         heap[free] = val
         parent = int((free - 1) / 2)
-        print(f"parent: {parent}, val: {val}")
-        print(f"heap[parent] = {heap[parent]}")
-        print(f"parent[1] = {heap[parent[1]]}")
-        print(f"val: {val}")
-        print(f"val[1] = {val[1]}")
-        while parent >= 0 and heap[parent[1]] < val[1]:
+        
+        while parent >= 0 and heap[parent][1] < val[1]:
             temp = heap[parent]
             heap[parent] = val
             heap[free] = temp
-            # print(f"{val} inserted at {parent}")
+            # print(f"{val[1]} inserted at {parent}")
             free = parent
             parent = (free - 1) / 2
             # print(f"    nums: {heap}")
         return heap
         
+    def getFirst(self, heap: List[int], free: int) -> List[int]:
+        value = heap[0]
+        heap[0] = heap[free-1]
+        index = 0
+        left = (2 * index) + 1
+        right = (2 * index) + 2
+        side = left if heap[left][1] > heap[right][1] else right
+
+        while heap[index][1] < heap[side][1]:
+            # swim down
+            print()
+
+        return value
+
+
